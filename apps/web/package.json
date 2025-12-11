@@ -1,0 +1,40 @@
+{
+  "name": "@bookmarks/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@bookmarks/shared": "workspace:*",
+    "@hookform/resolvers": "^3.9.1",
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-toast": "^1.2.4",
+    "@tanstack/react-query": "^5.62.7",
+    "fuse.js": "^7.0.0",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "postcss": "^8.4.49",
+    "jsdom": "^25.0.1",
+    "@vitejs/plugin-react-swc": "^4.2.2",
+    "tailwindcss": "^3.4.15",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4",
+    "vitest": "^2.1.2"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules
+.pnpm-store/
+.cache/
+.DS_Store
+.env
+.env.*
+dist
+build
+coverage
+.tmp
+apps/api/data/
+data/*.db
