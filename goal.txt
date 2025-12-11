@@ -1,0 +1,112 @@
+Title
+Bookmark Search Page – Requirements Document
+
+⸻
+
+Goal
+The application helps the user find saved web pages (bookmarks) quickly using a simple search page, instead of clicking through folders or long lists. A browser extension makes it easy to add the current page as a bookmark with one click.
+
+⸻
+
+Scope
+The product consists of:
+	•	A single web page with:
+	•	A main search view
+	•	A view to add bookmarks
+	•	A view to manage bookmarks
+	•	A browser extension that:
+	•	Adds the current tab as a bookmark with one click
+
+How the web page is opened (for example as new tab in the browser) is not part of this project.
+
+⸻
+
+Functional Requirements – Web Page
+	1.	Search View
+	•	The Search View is the default view when the page is opened.
+	•	When the page is opened, the search bar is already focused so the user can start typing immediately without clicking.
+	•	The view shows:
+	•	One large search bar in the center
+	•	A list area for search results below the search bar
+	•	When the user types in the search bar, a list of matching bookmarks is shown.
+	•	The search is fuzzy:
+	•	Matches should work for parts of the title
+	•	Matches should work for parts of the URL
+	•	Small typos or similar words should still find useful results
+	•	The list shows at least:
+	•	Title of the bookmark
+	•	URL (or a short form of it)
+	•	The user can:
+	•	Use arrow up/down keys to move through the list
+	•	Press Enter to open the selected bookmark in the browser
+	•	Click with the mouse on a result to open it
+	2.	Add Bookmark View
+	•	There is a way to switch from the Search View to the Add Bookmark View (for example a button or link “Add Bookmark”).
+	•	The Add Bookmark View shows a simple form with:
+	•	Input field for Title
+	•	Input field for URL
+	•	Save button
+	•	Cancel or Back option to return to the previous view
+	•	When the user clicks Save:
+	•	The bookmark is stored
+	•	The bookmark becomes available in search
+	•	The app gives simple feedback (for example short message “Bookmark saved”)
+	3.	Manage Bookmarks View
+	•	There is a way to switch from the Search View to the Manage Bookmarks View (for example a button or link “Manage Bookmarks”).
+	•	The Manage Bookmarks View shows a list of all saved bookmarks.
+	•	For each bookmark in the list, the user can:
+	•	See the title
+	•	See the URL (or shortened URL)
+	•	Edit the bookmark
+	•	Delete the bookmark
+	•	Edit:
+	•	Opens a small form with Title and URL
+	•	User can change both fields
+	•	User can save changes or cancel
+	•	Delete:
+	•	Removes the bookmark from storage
+	•	The bookmark no longer appears in search results
+	4.	Data Storage (Web Page)
+	•	All bookmarks (title and URL) are stored so that they are still available when the user opens the page again in the same browser.
+	•	Adding, editing, and deleting bookmarks updates this stored data.
+
+⸻
+
+Functional Requirements – Browser Extension
+	5.	Add Current Page as Bookmark
+	•	The extension shows an icon or button in the browser UI.
+	•	When the user clicks the extension button:
+	•	The extension reads the current tab’s URL and page title.
+	•	The extension sends this data (title and URL) to the bookmark system used by the web page.
+	•	If the page is added successfully:
+	•	The user gets simple feedback (for example “Bookmark added”).
+	•	If the bookmark already exists (same URL):
+	•	The system should not create a duplicate.
+	•	It may update the title or leave it unchanged (exact behavior can be defined later).
+	6.	Optional Quick Edit (Extension)
+	•	There may be a small popup when clicking the button that:
+	•	Shows the detected Title and URL
+	•	Allows the user to change the title before saving
+	•	Has a Save button to confirm
+	7.	Data Integration
+	•	Bookmarks created by the extension are stored in the same data store that the web page uses.
+	•	These bookmarks appear in:
+	•	Search View
+	•	Manage Bookmarks View
+
+⸻
+
+Non-Functional Requirements
+	•	The web page and extension should respond quickly.
+	•	The layout of the web page should be simple and easy to read.
+	•	The web page should work with only keyboard input (no mouse required):
+	•	Focus starts in the search bar on page load
+	•	Move through search results
+	•	Confirm actions like Save or Delete
+
+⸻
+
+Out of Scope
+	•	No import or sync of bookmarks from the browser’s own bookmark system or other tools.
+	•	No user accounts, login, or sync between devices.
+	•	No control over browser actions (like opening new tabs).
