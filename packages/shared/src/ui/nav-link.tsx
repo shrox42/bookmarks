@@ -10,7 +10,7 @@ export function NavLink({ className, active = false, ...props }: NavLinkProps) {
     <button
       data-active={active}
       className={cn(
-        'rounded-full px-4 py-1 text-sm font-medium uppercase tracking-[0.2em] text-white/60 transition hover:text-white data-[active=true]:bg-white/10 data-[active=true]:text-white',
+        'border-b-2 border-transparent pb-1 text-base font-semibold tracking-wide text-white/60 transition-colors hover:text-white data-[active=true]:border-white data-[active=true]:text-white',
         className
       )}
       {...props}

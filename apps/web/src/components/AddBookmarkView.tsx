@@ -30,8 +30,8 @@ export function AddBookmarkView({ onSubmit, onCancel, isSubmitting }: AddBookmar
   });
 
   return (
-    <Surface spotlight className="space-y-6">
-      <div>
+    <Surface className="mx-auto w-full max-w-3xl space-y-6 border-white/15 bg-white/5 px-10 py-10">
+      <div className="space-y-3 border-b border-white/10 pb-4">
         <h2 className="font-display text-3xl font-semibold">Add New Bookmark</h2>
         <p className="text-white/60">Store documentation, blog posts, or anything worth revisiting.</p>
       </div>
@@ -43,11 +43,11 @@ export function AddBookmarkView({ onSubmit, onCancel, isSubmitting }: AddBookmar
           error={errors.title?.message}
         />
         <Input label="URL" placeholder="https://..." type="url" {...register('url')} error={errors.url?.message} />
-        <div className="flex flex-wrap justify-end gap-3 pt-4">
-          <Button type="button" variant="ghost" onClick={onCancel}>
+        <div className="flex flex-wrap justify-between gap-3 pt-4">
+          <Button type="button" variant="ghost" className="flex-1 sm:flex-none" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" className="flex-1 sm:flex-none" disabled={isSubmitting}>
             {isSubmitting ? 'Saving…' : 'Save Bookmark'}
           </Button>
         </div>

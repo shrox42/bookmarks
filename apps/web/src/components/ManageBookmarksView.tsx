@@ -16,8 +16,8 @@ interface ManageBookmarksViewProps {
 
 export function ManageBookmarksView({ bookmarks, onUpdate, onDelete, updatingId, deletingId }: ManageBookmarksViewProps) {
   return (
-    <Surface spotlight className="space-y-6">
-      <div>
+    <Surface className="mx-auto w-full max-w-4xl space-y-6 border-white/15 bg-white/5 px-10 py-10">
+      <div className="space-y-3 border-b border-white/10 pb-4">
         <h2 className="font-display text-3xl font-semibold">Manage Bookmarks</h2>
         <p className="text-white/60">Edit titles, fix URLs, or clean up entries you no longer need.</p>
       </div>
@@ -55,7 +55,7 @@ function Row({
   deleting: boolean;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-white/10 bg-white/5 p-4">
+    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
       <div>
         <p className="font-display text-lg">{bookmark.title}</p>
         <p className="text-sm text-white/50">{getDisplayUrl(bookmark.url)}</p>
