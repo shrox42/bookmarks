@@ -5,12 +5,13 @@ import { ZodError } from 'zod';
 import { createBookmark, deleteBookmark, listBookmarks, searchBookmarks, updateBookmark } from './bookmark-service.js';
 
 const app = express();
+const apiRouter = express.Router();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.get('/bookmarks', async (req, res, next) => {
+apiRouter.get('/bookmarks', async (req, res, next) => {
   try {
     const { q, page, limit } = req.query;
     const result = await listBookmarks({
@@ -24,7 +25,7 @@ app.get('/bookmarks', async (req, res, next) => {
   }
 });
 
-app.get('/bookmarks/search', async (req, res, next) => {
+apiRouter.get('/bookmarks/search', async (req, res, next) => {
   try {
     const { q, page, limit } = req.query;
     if (typeof q !== 'string' || q.trim().length === 0) {
@@ -40,7 +41,7 @@ app.get('/bookmarks/search', async (req, res, next) => {
   }
 });
 
-app.post('/bookmarks', async (req, res, next) => {
+apiRouter.post('/bookmarks', async (req, res, next) => {
   try {
     const bookmark = await createBookmark(req.body);
     res.status(201).json(bookmark);
@@ -49,7 +50,7 @@ app.post('/bookmarks', async (req, res, next) => {
   }
 });
 
-app.put('/bookmarks/:id', async (req, res, next) => {
+apiRouter.put('/bookmarks/:id', async (req, res, next) => {
   try {
     const updated = await updateBookmark(req.params.id, req.body);
     res.json(updated);
@@ -58,7 +59,7 @@ app.put('/bookmarks/:id', async (req, res, next) => {
   }
 });
 
-app.delete('/bookmarks/:id', async (req, res, next) => {
+apiRouter.delete('/bookmarks/:id', async (req, res, next) => {
   try {
     await deleteBookmark(req.params.id);
     res.json({ success: true });
@@ -66,6 +67,8 @@ app.delete('/bookmarks/:id', async (req, res, next) => {
     next(error);
   }
 });
+
+app.use('/api', apiRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
