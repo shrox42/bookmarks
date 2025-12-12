@@ -1,6 +1,6 @@
 import type { CreateBookmarkPayload } from '@bookmarks/shared';
 import { createBookmarkSchema } from '@bookmarks/shared';
-import { Button, Input, Surface } from '@bookmarks/shared/ui';
+import { Input } from '@bookmarks/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -30,12 +30,11 @@ export function AddBookmarkView({ onSubmit, onCancel, isSubmitting }: AddBookmar
   });
 
   return (
-    <Surface className="mx-auto w-full max-w-3xl space-y-6 border-white/15 bg-white/5 px-10 py-10">
-      <div className="space-y-3 border-b border-white/10 pb-4">
-        <h2 className="font-display text-3xl font-semibold">Add New Bookmark</h2>
-        <p className="text-white/60">Store documentation, blog posts, or anything worth revisiting.</p>
+    <div className="mx-auto w-full max-w-3xl">
+      <div className="space-y-4 border-b border-white/10 pb-6">
+        <h2 className="font-display text-4xl font-semibold tracking-tight">Add New Bookmark</h2>
       </div>
-      <form onSubmit={submit} className="space-y-5">
+      <form onSubmit={submit} className="mt-10 space-y-7">
         <Input
           label="Title"
           placeholder="e.g., My Favorite Documentation"
@@ -43,15 +42,23 @@ export function AddBookmarkView({ onSubmit, onCancel, isSubmitting }: AddBookmar
           error={errors.title?.message}
         />
         <Input label="URL" placeholder="https://..." type="url" {...register('url')} error={errors.url?.message} />
-        <div className="flex flex-wrap justify-between gap-3 pt-4">
-          <Button type="button" variant="ghost" className="flex-1 sm:flex-none" onClick={onCancel}>
+        <div className="flex flex-wrap gap-4 pt-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex flex-1 min-w-[140px] items-center justify-center rounded-xl border border-white/25 px-8 py-3 text-base font-semibold text-white transition hover:bg-white/10 sm:flex-none"
+          >
             Cancel
-          </Button>
-          <Button type="submit" className="flex-1 sm:flex-none" disabled={isSubmitting}>
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex flex-1 min-w-[180px] items-center justify-center rounded-xl bg-white/80 px-8 py-3 text-base font-semibold text-slate-900 transition hover:bg-white disabled:pointer-events-none disabled:opacity-60 sm:flex-none"
+          >
             {isSubmitting ? 'Saving…' : 'Save Bookmark'}
-          </Button>
+          </button>
         </div>
       </form>
-    </Surface>
+    </div>
   );
 }
