@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { CreateBookmarkPayload, UpdateBookmarkPayload } from '@shared/index.js';
-import { BookmarkClient } from '@shared/index.js';
+import type { CreateBookmarkPayload, UpdateBookmarkPayload } from '@bookmarks/shared';
+import { BookmarkClient } from '@bookmarks/shared';
 import { useMemo, useState } from 'react';
 import { AddBookmarkView } from './components/AddBookmarkView.tsx';
 import { Layout, type View } from './components/Layout.tsx';
@@ -77,7 +77,9 @@ function BookmarksApp() {
       ) : null}
       {view === 'add' ? (
         <AddBookmarkView
-          onSubmit={(payload) => createMutation.mutateAsync(payload)}
+          onSubmit={async (payload) => {
+            await createMutation.mutateAsync(payload);
+          }}
           onCancel={() => setView('search')}
           isSubmitting={createMutation.isPending}
         />
@@ -85,8 +87,12 @@ function BookmarksApp() {
       {view === 'manage' ? (
         <ManageBookmarksView
           bookmarks={bookmarks}
-          onUpdate={(id, payload) => updateMutation.mutateAsync({ id, payload })}
-          onDelete={(id) => deleteMutation.mutateAsync(id)}
+          onUpdate={async (id, payload) => {
+            await updateMutation.mutateAsync({ id, payload });
+          }}
+          onDelete={async (id) => {
+            await deleteMutation.mutateAsync(id);
+          }}
           updatingId={updateMutation.variables?.id}
           deletingId={deleteMutation.variables}
         />

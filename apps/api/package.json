@@ -12,6 +12,7 @@
     "migrate": "tsx src/migrate.ts"
   },
   "dependencies": {
+    "@bookmarks/shared": "workspace:*",
     "@libsql/client": "^0.15.15",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.45.1",

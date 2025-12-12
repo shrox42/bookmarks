@@ -26,6 +26,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@bookmarks/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@libsql/client':
         specifier: ^0.15.15
         version: 0.15.15

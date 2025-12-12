@@ -1,45 +1,40 @@
-# Bookmark Search System – Implementation Plan
+# Easy Local Deployment Plan
 
-## Workspace & Tooling
-- [x] Initialize pnpm workspace (`pnpm-workspace.yaml`) covering `apps/*` and `packages/*`; root `package.json` defines scripts (`dev`, `build`, `lint`, `test`) that delegate via `pnpm --filter`.
-- [x] Add shared configs: `tsconfig.base.json`, ESLint/Prettier, Tailwind base styles, `.editorconfig`, `.npmrc` (enforce pnpm) and `.gitignore`.
-- [x] Create `packages/shared` with Bookmark domain types (zod schema + TypeScript interfaces), reusable fetch client, short-url helper, and shared UI primitives exported for web + extension.
+## Goal
+Enable any contributor to run the Bookmark Search system locally using only Docker/Docker Compose (no Node.js or pnpm on the host) by introducing containerized builds for the API and web SPA plus documentation.
 
-## Backend API (`apps/api`)
-- [x] Scaffold Express + TypeScript project (Node 20+) using pnpm workspace deps.
-- [x] Wire SQLite via Drizzle ORM + libSQL client (`apps/api/src/schema.ts`, `db.ts`) with migration utility; define `bookmarks` table mirroring the model.
-- [x] Implement services for CRUD + upsert-by-URL; ensure timestamps auto-update and URLs remain unique.
-- [x] Routes:
-  - [x] `GET /bookmarks` – list, optional pagination.
-  - [x] `GET /bookmarks/search?q=` – leverage SQL `LIKE` + optional Fuse.js fallback for fuzzy matches.
-  - [x] `POST /bookmarks` – create/update by URL.
-  - [x] `PUT /bookmarks/:id` – update fields.
-  - [x] `DELETE /bookmarks/:id` – remove entry.
-- [x] Middleware: CORS (allow SPA origin + extension), JSON parsing, structured logging, centralized error handler.
-- [x] Scripts: `pnpm --filter api dev` (tsx watch), `build` (tsc emit), `start` (node dist). Add Vitest + supertest coverage for services/routes.
+## Deliverables
+- Workspace-level `.dockerignore` to shrink build context.
+- Multi-stage `Dockerfile` that installs workspace deps once and emits runtime-ready artifacts for API and web.
+- API entrypoint script that runs migrations before launching the server.
+- Nginx config (or equivalent) that serves the built SPA and proxies `/api` traffic to the API container.
+- `docker-compose.yml` orchestrating API + web services with a named volume for the SQLite database.
+- Documentation updates (`README.md`, `docs/setup.md`) covering Docker prerequisites and usage instructions.
 
-## Web App (`apps/web`)
-- [x] Bootstrap React + Vite + TypeScript; integrate Tailwind, shadcn/ui (CLI), lucide-react icons, and shared UI primitives.
-- [x] Establish global data layer (React Query or Zustand) interfacing with shared API client; handle optimistic updates for mutations.
-- [ ] Views:
-  - [x] **Search (default)**: loads bookmarks on mount, fuzzy client search (Fuse.js) on title+URL, keyboard navigation (custom hook) and Enter to `window.open`.
-  - [x] **Add Bookmark**: form with validation (zod + react-hook-form), success toast, returns to Search, refresh data.
-  - [x] **Manage Bookmarks**: table/list of entries with inline edit modal (Title/URL) and delete confirmation using shadcn dialog; all actions keyboard accessible.
-- [x] Provide navigation controls to switch views plus prominent “Add”/“Manage” buttons; ensure focus management per requirements.
-- [x] Configure Vite dev server proxy to API (`/api` → `http://localhost:<api-port>`); set build script output for deployment.
-- [x] Add Vitest + React Testing Library for critical hooks/components (search filtering, form validation).
+## Work Items
+1. **Audit build outputs**
+   - Confirm `pnpm -r build` creates `apps/api/dist` + `apps/web/dist` and that shared packages ship compiled code suitable for runtime copying.
+2. **Author `.dockerignore`**
+   - Ignore `node_modules`, `apps/*/dist`, `apps/api/data`, `pnpm-store`, log files, and other non-essential artifacts.
+3. **Implement multi-stage Dockerfile**
+   - Base stage: `node:20-alpine`, enable Corepack/pnpm, copy lock/workspace manifests.
+   - Builder: copy repo, run `pnpm install --frozen-lockfile` and `pnpm -r build`.
+   - Use `pnpm deploy --filter ...` (or manual copy) to emit slim runtime bundles for API and web.
+   - Runtime stages: `api-runtime` copies API bundle, `web-runtime` copies web dist plus static server binary/config.
+4. **Add API entrypoint script**
+   - Script ensures `node dist/migrate.js` executes before `node dist/server.js` inside the container; mark executable.
+5. **Create web server config**
+   - Provide Nginx (or similar) config with SPA fallback and `/api` proxy to `http://api:4000`.
+6. **Write docker-compose.yml**
+   - Define `api` (port 4000, volume mount for `apps/api/data`) and `web` (port 5173→80) services referencing Dockerfile targets.
+   - Declare named volume `api-data` for persistent SQLite storage.
+   - Ensure service dependency so web waits for API.
+7. **Document workflow**
+   - Update `README.md` + `docs/setup.md` with Docker requirement, `docker compose up --build`, rebuilding instructions, and how to reset persisted data.
+8. **Validate**
+   - Run `docker compose build` and `docker compose up`, verify API reachable at `http://localhost:4000/bookmarks` and SPA at `http://localhost:5173`, including `/api` proxy behavior.
 
-## Browser Extension (`apps/extension`)
-- [x] Create MV3 manifest targeting Chromium/Edge (`action`, `permissions: ["tabs"]`, `host_permissions` for API, `background.service_worker` entry).
-- [x] Bundle background worker + popup via Vite (separate config) consuming shared Bookmark client/types.
-- [x] Background flow: on toolbar click, fetch active tab info (`chrome.tabs.query`), POST to API, show badge or notification for success/error.
-- [x] Popup UI (React + Tailwind/shadcn):
-  - [x] Prefill title/URL from active tab data via `chrome.runtime.sendMessage`.
-  - [x] Allow title edits, call API via shared client, show toast feedback.
-- [x] Provide build script that outputs packaged extension (zip instructions optional) and a `dev` script with `pnpm --filter extension dev` for watch reload.
-
-## Quality, Docs & Ops
-- [x] Root scripts orchestrate concurrent dev (`pnpm dev` running API + web + extension watchers via `tsx`/`vite` + `concurrently` or `turbo`).
-- [x] Implement ESLint + Prettier workspace-wide; ensure CI-ready commands (lint/test/build) succeed.
-- [x] Document setup & usage in `README.md`/`docs` (pnpm install, running individual apps, building extension, SQLite file location).
-- [x] Add `.gitignore` entries (`node_modules`, `dist`, `data/*.db`, etc.) and note pnpm requirements (Node 20 LTS).
+## Risks & Mitigations
+- **Cold build time**: Keep contexts slim via `.dockerignore` and pnpm deploy to reduce image size.
+- **File permission on entrypoint**: Set executable bit during build (`chmod +x`).
+- **Hot reload expectations**: Document that Docker flow targets “easy deploy,” while pnpm dev remains best for rapid iteration.

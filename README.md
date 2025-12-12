@@ -11,6 +11,23 @@ A pnpm-powered monorepo that ships the API, React SPA, Chromium extension, and s
 
 ## Getting Started
 
+### Docker (easy local deploy)
+1. Install Docker Desktop (or Docker Engine) with Compose support.
+2. Build and start the stack:
+   ```bash
+   docker compose up --build
+   ```
+   - API → http://localhost:4000
+   - Web client → http://localhost:5173 (served by Nginx and proxying `/api`)
+   - Override host ports by exporting `API_PORT` / `WEB_PORT` before running compose if the defaults are busy.
+3. To rebuild after code changes, run `docker compose build` (or `docker compose build api` / `web` for a single service) followed by `docker compose up`.
+4. Data persists inside the named `api-data` volume. Reset it with:
+   ```bash
+   docker compose down -v
+   ```
+
+### Node + pnpm workflow
+
 1. Install dependencies:
    ```bash
    pnpm install

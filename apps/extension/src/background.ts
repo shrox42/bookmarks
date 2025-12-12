@@ -1,4 +1,4 @@
-import { BookmarkClient } from '@shared/index.js';
+import { BookmarkClient } from '@bookmarks/shared';
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:4000').replace(/\/$/, '');
 const client = new BookmarkClient({ baseUrl: API_BASE_URL });

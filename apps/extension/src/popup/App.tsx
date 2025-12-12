@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, Input, Surface } from '@shared/ui';
-import { BookmarkClient } from '@shared/index.js';
+import { Button, Input, Surface } from '@bookmarks/shared/ui';
+import { BookmarkClient } from '@bookmarks/shared';
 
 interface ActiveTabInfo {
   title: string;

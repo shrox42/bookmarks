@@ -1,5 +1,5 @@
-import type { Bookmark } from '@shared/index.js';
-import { getDisplayUrl } from '@shared/index.js';
+import type { Bookmark } from '@bookmarks/shared';
+import { getDisplayUrl } from '@bookmarks/shared';
 import { Search } from 'lucide-react';
 import { useCallback } from 'react';
 import { useBookmarkSearch } from '../hooks/useBookmarkSearch.ts';

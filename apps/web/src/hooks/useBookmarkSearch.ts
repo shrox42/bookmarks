@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import Fuse from 'fuse.js';
-import type { Bookmark } from '@shared/index.js';
+import type { Bookmark } from '@bookmarks/shared';
 
 export function useBookmarkSearch(source: Bookmark[]) {
   const [query, setQuery] = useState('');

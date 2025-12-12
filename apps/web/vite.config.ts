@@ -14,8 +14,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@shared': fileURLToPath(new URL('../../packages/shared/src', import.meta.url)),
-      '@shared/ui': fileURLToPath(new URL('../../packages/shared/src/ui', import.meta.url)),
+      '@bookmarks/shared': fileURLToPath(new URL('../../packages/shared/src', import.meta.url)),
+      '@bookmarks/shared/ui': fileURLToPath(new URL('../../packages/shared/src/ui', import.meta.url)),
     },
   },
 });

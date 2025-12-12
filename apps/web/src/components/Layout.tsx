@@ -1,6 +1,6 @@
 import { Bookmark } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { NavLink } from '@shared/ui';
+import { NavLink } from '@bookmarks/shared/ui';
 
 export type View = 'search' | 'add' | 'manage';
 

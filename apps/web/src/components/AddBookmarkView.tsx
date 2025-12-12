@@ -1,6 +1,6 @@
-import type { CreateBookmarkPayload } from '@shared/index.js';
-import { createBookmarkSchema } from '@shared/index.js';
-import { Button, Input, Surface } from '@shared/ui';
+import type { CreateBookmarkPayload } from '@bookmarks/shared';
+import { createBookmarkSchema } from '@bookmarks/shared';
+import { Button, Input, Surface } from '@bookmarks/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

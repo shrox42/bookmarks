@@ -1,10 +1,10 @@
-import type { Bookmark, UpdateBookmarkPayload } from '@shared/index.js';
-import { Button, Surface } from '@shared/ui';
+import type { Bookmark, UpdateBookmarkPayload } from '@bookmarks/shared';
+import { Button, Surface } from '@bookmarks/shared/ui';
 import { PenSquare, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogTrigger } from './Dialog.tsx';
-import { Input } from '@shared/ui';
-import { getDisplayUrl } from '@shared/index.js';
+import { Input } from '@bookmarks/shared/ui';
+import { getDisplayUrl } from '@bookmarks/shared';
 
 interface ManageBookmarksViewProps {
   bookmarks: Bookmark[];

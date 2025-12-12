@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import Fuse from 'fuse.js';
 import { desc, eq, like, or, sql } from 'drizzle-orm';
-import type { Bookmark, CreateBookmarkPayload, PaginatedResult, UpdateBookmarkPayload } from '@shared/index.js';
-import { createBookmarkSchema, updateBookmarkSchema } from '@shared/index.js';
+import type { Bookmark, CreateBookmarkPayload, PaginatedResult, UpdateBookmarkPayload } from '@bookmarks/shared';
+import { createBookmarkSchema, updateBookmarkSchema } from '@bookmarks/shared';
 import { getDb, mapRowToBookmark, type BookmarkRow } from './db.js';
 import { bookmarks } from './schema.js';
 
@@ -33,17 +33,15 @@ export async function listBookmarks(params?: ListParams): Promise<PaginatedResul
   const whereClause = buildSearchCondition(params?.query);
   const { limit, offset } = normalizePagination(params);
 
-  let rowsQuery = db.select().from(bookmarks);
-  if (whereClause) {
-    rowsQuery = rowsQuery.where(whereClause);
-  }
-  rowsQuery = rowsQuery.orderBy(desc(bookmarks.updatedAt)).limit(limit).offset(offset);
-  const rows = (await rowsQuery) as BookmarkRow[];
+  const baseRowsQuery = db.select().from(bookmarks);
+  const rowsQuery = whereClause ? baseRowsQuery.where(whereClause) : baseRowsQuery;
+  const rows = (await rowsQuery
+    .orderBy(desc(bookmarks.updatedAt))
+    .limit(limit)
+    .offset(offset)) as BookmarkRow[];
 
-  let countQuery = db.select({ total: sql<number>`count(*)` }).from(bookmarks);
-  if (whereClause) {
-    countQuery = countQuery.where(whereClause);
-  }
+  const baseCountQuery = db.select({ total: sql<number>`count(*)` }).from(bookmarks);
+  const countQuery = whereClause ? baseCountQuery.where(whereClause) : baseCountQuery;
   const [{ total }] = await countQuery;
 
   return {

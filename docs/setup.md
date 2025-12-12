@@ -1,6 +1,22 @@
 # Bookmark Search Workspace
 
-## Prerequisites
+## Docker Quickstart
+- Install Docker Desktop (or Docker Engine + Compose).
+- Build + run the containers:
+  ```bash
+  docker compose up --build
+  ```
+  - API: http://localhost:4000
+  - Web SPA: http://localhost:5173 (served via Nginx with `/api` proxying to the API container)
+- Host port conflicts? export `API_PORT` / `WEB_PORT` before `docker compose up` (defaults are 4000/5173).
+- Rebuild a single service after code changes:
+  ```bash
+  docker compose build api   # or web
+  docker compose up
+  ```
+- Persistent SQLite data lives in the `api-data` named volume (`file:/data/bookmarks.db`). Reset it with `docker compose down -v`.
+
+## Prerequisites (pnpm workflow)
 - Node.js 20 or newer (project is tested on Node 25 via pnpm)
 - pnpm 10+
 

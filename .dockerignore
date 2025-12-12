@@ -1,0 +1,21 @@
+# Exclude git metadata & local configs
+.git
+.gitignore
+.DS_Store
+
+# Dependency + build outputs (rebuilt inside the container)
+node_modules
+**/node_modules
+apps/*/dist
+packages/*/dist
+apps/api/data
+pnpm-store
+pnpm-debug.log
+*.log
+**/*.tsbuildinfo
+
+# Editor + tooling noise
+.vscode
+.idea
+coverage
+Mocks

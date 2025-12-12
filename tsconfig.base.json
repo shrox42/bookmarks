@@ -12,9 +12,9 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@shared": ["packages/shared/src/index.ts"],
-      "@shared/*": ["packages/shared/src/*"],
-      "@shared/ui": ["packages/shared/src/ui/index.ts"]
+      "@bookmarks/shared": ["packages/shared/src/index.ts"],
+      "@bookmarks/shared/*": ["packages/shared/src/*"],
+      "@bookmarks/shared/ui": ["packages/shared/src/ui/index.ts"]
     }
   },
   "include": []

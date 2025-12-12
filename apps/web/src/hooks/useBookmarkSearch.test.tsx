@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import type { Bookmark } from '@shared/index.js';
+import type { Bookmark } from '@bookmarks/shared';
 import { describe, expect, it } from 'vitest';
 import { useBookmarkSearch } from './useBookmarkSearch.ts';
 
