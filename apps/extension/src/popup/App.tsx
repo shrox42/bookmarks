@@ -7,7 +7,7 @@ interface ActiveTabInfo {
   url: string;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:14747/api').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:47474/api').replace(/\/$/, '');
 const client = new BookmarkClient({ baseUrl: API_BASE_URL });
 
 export function App() {

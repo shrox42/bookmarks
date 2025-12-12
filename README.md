@@ -19,14 +19,18 @@ A pnpm-powered monorepo that ships the API, React SPA, Chromium extension, and s
    ```bash
    docker compose up --build
    ```
-   - Web client + `/api` proxy → http://localhost:14747
-   - Extension requests go through `http://localhost:14747/api`
-   - Override the published port by exporting `WEB_PORT` before running compose (defaults to `14747`).
+   - Web client + `/api` proxy → http://localhost:47474
+   - Extension requests go through `http://localhost:47474/api`
+   - Override the published port by exporting `WEB_PORT` before running compose (defaults to `47474`).
 3. To rebuild after code changes, run `docker compose build` (or `docker compose build api` / `web` for a single service) followed by `docker compose up`.
 4. Data persists inside the named `api-data` volume. Reset it with:
    ```bash
    docker compose down -v
    ```
+
+### Omarchy service install
+- Follow `docs/deploy/omarchy.md` for a `systemd`-managed deployment that keeps app code under `/opt/bookmarks/app`, data under `/opt/bookmarks/data`, and exposes only port `47474`.
+- The guide covers prerequisites, installer usage (`scripts/install-omarchy-service.sh`), update workflow, and backup/troubleshooting steps.
 
 ### Node + pnpm workflow
 

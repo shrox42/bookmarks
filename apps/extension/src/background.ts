@@ -1,6 +1,6 @@
 import { BookmarkClient } from '@bookmarks/shared';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:14747/api').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:47474/api').replace(/\/$/, '');
 const ENABLE_NEW_TAB_REDIRECT = import.meta.env.VITE_ENABLE_NEW_TAB_REDIRECT !== 'false';
 const WEB_APP_URL = (import.meta.env.VITE_WEB_APP_URL ?? 'http://localhost:5173').replace(/\/$/, '');
 const NEW_TAB_REDIRECT_URL = `${WEB_APP_URL}/`;

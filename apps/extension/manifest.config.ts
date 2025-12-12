@@ -9,7 +9,7 @@ export default defineManifest(() => ({
     default_popup: 'popup.html',
   },
   permissions: ['tabs'],
-  host_permissions: ['http://localhost:14747/*'],
+  host_permissions: ['http://localhost:47474/*'],
   background: {
     service_worker: 'src/background.ts',
     type: 'module',

@@ -6,8 +6,8 @@
   ```bash
   docker compose up --build
   ```
-  - Web SPA + `/api`: http://localhost:14747 (Nginx proxies `/api` to the API container)
-- Host port conflicts? export `WEB_PORT` before `docker compose up` (default is 14747).
+  - Web SPA + `/api`: http://localhost:47474 (Nginx proxies `/api` to the API container)
+- Host port conflicts? export `WEB_PORT` before `docker compose up` (default is 47474).
 - Rebuild a single service after code changes:
   ```bash
   docker compose build api   # or web
@@ -46,7 +46,7 @@ pnpm --filter @bookmarks/extension dev
 - Override the location by exporting `DATABASE_URL` before running the API or tests.
 
 ### Environment Variables
-- `apps/web` + `apps/extension` optionally honor `VITE_API_URL`; default is `/api` (web) and `http://localhost:14747/api` (extension/background when using Docker).
+- `apps/web` + `apps/extension` optionally honor `VITE_API_URL`; default is `/api` (web) and `http://localhost:47474/api` (extension/background when using Docker).
 - `apps/extension` respects `VITE_ENABLE_NEW_TAB_REDIRECT` (default `true`) and `VITE_WEB_APP_URL` (default `http://localhost:5173`) to control the optional new-tab redirect into the Bookmark Search app without affecting regular bookmark navigation.
 - Never commit `.env` files. Update `.env.example` if new variables are required.
 
@@ -65,4 +65,4 @@ pnpm test
 pnpm build
 ```
 
-The API container still listens on port 4000 internally for both Docker and local dev; the Dockerized web app exposes `http://localhost:14747` and proxies `/api` to `api:4000`, while the Vite dev server proxies `/api` to `localhost:4000`.
+The API container still listens on port 4000 internally for both Docker and local dev; the Dockerized web app exposes `http://localhost:47474` and proxies `/api` to `api:4000`, while the Vite dev server proxies `/api` to `localhost:4000`.

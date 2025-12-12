@@ -1,0 +1,16 @@
+[Unit]
+Description=Bookmark Search Docker Stack
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/opt/bookmarks/bookmarks.env
+ExecStart=/usr/bin/env bash -c '. /opt/bookmarks/bookmarks.env && cd \"$BOOKMARKS_ROOT/app\" && docker compose --env-file /opt/bookmarks/bookmarks.env up -d'
+ExecStop=/usr/bin/env bash -c '. /opt/bookmarks/bookmarks.env && cd \"$BOOKMARKS_ROOT/app\" && docker compose --env-file /opt/bookmarks/bookmarks.env down'
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
