@@ -5,7 +5,7 @@ This guide documents how to install, run, and maintain the Bookmark Search stack
 ## Prerequisites
 - A sudo-capable user on an Arch/Omarchy system with `systemd`
 - Docker Engine + `docker compose` plugin
-- `rsync` (for mirroring the repo into `/opt/bookmarks/app`)
+- Standard GNU userland utilities (`tar`, `cp`, `install`)
 
 ## Directory Layout & Environment
 The installer expects the following defaults (editable in `deploy/environment/bookmarks.env` before installation):
@@ -14,7 +14,7 @@ The installer expects the following defaults (editable in `deploy/environment/bo
 | --- | --- | --- |
 | `BOOKMARKS_ROOT` | `/opt/bookmarks` | Parent directory for the deployment |
 | `BOOKMARKS_DATA_DIR` | `/opt/bookmarks/data` | Host path bound to the SQLite data volume |
-| `WEB_PORT` | `47474` | Host port exposed by the Nginx `web` container |
+| `WEB_PORT` | `14747` | Host port exposed by the Nginx `web` container |
 | `COMPOSE_PROJECT_NAME` | `bookmarks` | Compose project prefix (controls volume names) |
 
 Copy the template into place (the installer does this automatically) and adjust the values if you need a different path or port:
@@ -32,8 +32,8 @@ sudo scripts/install-omarchy-service.sh
 ```
 
 What the script does:
-1. Verifies Docker + Compose + rsync are available.
-2. Copies the repo into `${BOOKMARKS_ROOT}/app` (rsync keeps it idempotent).
+1. Verifies Docker + Compose + required GNU tools are available.
+2. Archives your current working tree (including `.git`, excluding heavy caches) and copies it into `${BOOKMARKS_ROOT}/app` so production owns its own clone.
 3. Creates `${BOOKMARKS_DATA_DIR}` and pre-creates the named volume (`${COMPOSE_PROJECT_NAME}_api-data`) bound to that host directory so database files persist outside Docker.
 4. Installs `/etc/systemd/system/bookmarks.service`, which sources `/opt/bookmarks/bookmarks.env` and runs `docker compose up -d` from `${BOOKMARKS_ROOT}/app`.
 5. Enables and starts the service.
@@ -46,7 +46,7 @@ sudo journalctl -u bookmarks.service -f
 ```
 
 ## Daily Operation
-- UI + `/api` proxy live at `http://localhost:${WEB_PORT}` (defaults to `47474`).
+- UI + `/api` proxy live at `http://localhost:${WEB_PORT}` (defaults to `14747`).
 - The API container still listens on `4000` internally; external clients (SPA, browser extension) should use `http://localhost:${WEB_PORT}/api`.
 - Data lives in `${BOOKMARKS_DATA_DIR}`; back it up like any other directory (e.g., `sudo tar -czf bookmarks-data.tgz -C ${BOOKMARKS_DATA_DIR} .`).
 
@@ -58,7 +58,7 @@ sudo journalctl -u bookmarks.service -f
    sudo scripts/bookmarks-update.sh
    ```
 
-   The script stops the unit, optionally runs `git pull` inside `${BOOKMARKS_ROOT}/app`, rebuilds images, runs migrations via `docker compose run --rm api node dist/migrate.js`, and restarts the service. Set `BOOKMARKS_SKIP_PULL=1` in `/opt/bookmarks/bookmarks.env` if you distribute updates another way (e.g., copying artifacts in).
+   The script stops the unit, fast-forwards `main` from `origin` (unless `BOOKMARKS_SKIP_PULL=1`), rebuilds images, runs migrations via `docker compose run --rm api node dist/migrate.js`, and restarts the service. Ensure the server has network access to the repository remote so the fetch succeeds.
 
 ## Troubleshooting Checklist
 - `sudo systemctl status bookmarks.service` – confirm the unit is active.

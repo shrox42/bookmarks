@@ -24,9 +24,24 @@ BOOKMARKS_APP_DIR="${BOOKMARKS_ROOT}/app"
 
 systemctl stop "${SYSTEMD_UNIT_NAME}"
 
-if [[ -d "${BOOKMARKS_APP_DIR}/.git" && "${BOOKMARKS_SKIP_PULL:-0}" != "1" ]]; then
-  git -C "${BOOKMARKS_APP_DIR}" pull --ff-only || {
-    echo "git pull failed. Resolve the issue and rerun."
+if [[ "${BOOKMARKS_SKIP_PULL:-0}" != "1" ]]; then
+  if [[ ! -d "${BOOKMARKS_APP_DIR}/.git" ]]; then
+    echo "Missing git data in ${BOOKMARKS_APP_DIR}. Re-run the installer."
+    exit 1
+  fi
+
+  git -C "${BOOKMARKS_APP_DIR}" fetch origin main || {
+    echo "git fetch origin main failed. Resolve the issue and rerun."
+    exit 1
+  }
+
+  git -C "${BOOKMARKS_APP_DIR}" checkout main >/dev/null 2>&1 || {
+    echo "Unable to checkout main in ${BOOKMARKS_APP_DIR}."
+    exit 1
+  }
+
+  git -C "${BOOKMARKS_APP_DIR}" reset --hard origin/main || {
+    echo "git reset --hard origin/main failed. Resolve the issue and rerun."
     exit 1
   }
 fi

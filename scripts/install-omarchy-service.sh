@@ -13,7 +13,13 @@ BOOKMARKS_ENV_PATH="/opt/bookmarks/bookmarks.env"
 
 command -v docker >/dev/null 2>&1 || { echo "Docker is required."; exit 1; }
 docker compose version >/dev/null 2>&1 || { echo "\"docker compose\" plugin is required."; exit 1; }
-command -v rsync >/dev/null 2>&1 || { echo "rsync is required."; exit 1; }
+command -v tar >/dev/null 2>&1 || { echo "tar is required."; exit 1; }
+command -v cp >/dev/null 2>&1 || { echo "cp is required."; exit 1; }
+
+if [[ ! -d "${REPO_ROOT}/.git" ]]; then
+  echo "This installer must run from a git working tree."
+  exit 1
+fi
 
 install -d /opt/bookmarks
 
@@ -32,12 +38,24 @@ set +a
 
 BOOKMARKS_APP_DIR="${BOOKMARKS_ROOT}/app"
 
+TMP_SYNC_DIR="$(mktemp -d)"
+cleanup() {
+  rm -rf "${TMP_SYNC_DIR}"
+}
+trap cleanup EXIT
+
+tar -C "${REPO_ROOT}" -cf - \
+  --exclude='./node_modules' \
+  --exclude='./.turbo' \
+  --exclude='./.pnpm-store' \
+  . | tar -C "${TMP_SYNC_DIR}" -xf -
+
+rm -rf "${BOOKMARKS_APP_DIR}"
 install -d "${BOOKMARKS_APP_DIR}"
-rsync -a --delete \
-  --exclude '.git' \
-  --exclude 'node_modules' \
-  --exclude '.turbo' \
-  "${REPO_ROOT}/" "${BOOKMARKS_APP_DIR}/"
+cp -a "${TMP_SYNC_DIR}/." "${BOOKMARKS_APP_DIR}/"
+
+trap - EXIT
+rm -rf "${TMP_SYNC_DIR}"
 
 install -d "${BOOKMARKS_DATA_DIR}"
 
