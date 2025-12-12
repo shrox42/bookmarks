@@ -1,5 +1,7 @@
 # Bookmark Search System
 
+> **Status:** Active work in progress. Expect APIs, UIs, and tooling to change quickly while core features solidify.
+
 A pnpm-powered monorepo that ships the API, React SPA, Chromium extension, and shared packages required for the Bookmark Search experience shown in `/Mocks`.
 
 ## Packages
