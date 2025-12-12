@@ -10,3 +10,4 @@ coverage
 .tmp
 apps/api/data/
 data/*.db
+plan.md
