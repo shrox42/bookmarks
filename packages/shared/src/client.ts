@@ -13,8 +13,13 @@ export class BookmarkClient {
 
   constructor(options: BookmarkClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
-    this.fetchImpl = options.fetchImpl ?? globalThis.fetch;
-    if (!this.fetchImpl) {
+
+    if (options.fetchImpl) {
+      this.fetchImpl = options.fetchImpl;
+    } else if (typeof globalThis.fetch === 'function') {
+      // Bind to the global context so browsers don't treat it as an illegal invocation.
+      this.fetchImpl = globalThis.fetch.bind(globalThis);
+    } else {
       throw new Error('BookmarkClient requires a fetch implementation.');
     }
   }
