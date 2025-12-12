@@ -4,8 +4,6 @@ services:
       context: .
       target: api-runtime
     image: bookmarks-api
-    ports:
-      - "${API_PORT:-4000}:4000"
     environment:
       NODE_ENV: production
       DATABASE_URL: file:/data/bookmarks.db
@@ -21,7 +19,7 @@ services:
     depends_on:
       - api
     ports:
-      - "${WEB_PORT:-5173}:80"
+      - "${WEB_PORT:-14747}:80"
     restart: unless-stopped
 
 volumes:

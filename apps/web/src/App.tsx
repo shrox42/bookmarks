@@ -69,7 +69,7 @@ function BookmarksApp() {
     <Layout view={view} onNavigate={setView}>
       {bookmarksQuery.isError ? (
         <p className="rounded-3xl border border-rose-400/50 bg-rose-500/10 px-6 py-4 text-rose-200">
-          Could not load bookmarks. Ensure the API is running on port 4000.
+          Could not load bookmarks. Ensure the Docker stack is running on http://localhost:14747.
         </p>
       ) : null}
       {view === 'search' ? (
