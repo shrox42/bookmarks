@@ -59,6 +59,16 @@ pnpm --filter @bookmarks/extension dev
 
 Blank `chrome://newtab` tabs automatically redirect to the Bookmark SPA at `VITE_WEB_URL` (defaults to `http://localhost:14747/`). To keep Chrome's stock new tab page in development, export `VITE_ENABLE_NEW_TAB_REDIRECT=false` before running `pnpm --filter @bookmarks/extension dev` or building, or point `VITE_WEB_URL` at a different environment.
 
+#### Manual install / update flow
+- Run `pnpm package-extension` (or `pnpm --filter @bookmarks/extension package`) any time you need a distributable archive. The script rebuilds the extension, zips `dist/`, produces SHA256 metadata, and copies everything into both `apps/web/public/extension/` and `apps/web/dist/extension/` when the web bundle already exists.
+- `pnpm build` already triggers the packaging script, so Docker builds and Omarchy deploys automatically expose `/extension/bookmark-dropper-vX.Y.Z.zip` plus `/extension/latest.json`.
+- Share the hosted helper page at `/extension` for teammates. It links to the newest zip, shows the checksum + build timestamp, and outlines the `chrome://extensions` Developer Mode steps.
+- Manual install steps:
+  1. Download the latest zip from `/extension`.
+  2. Extract it locally.
+  3. Open `chrome://extensions`, enable Developer Mode, choose **Load unpacked**, and pick the extracted folder.
+  4. Repeat whenever a new deployment publishes a fresh zip; Chrome will highlight the extension and offer a **Reload** button because the manifest copies `apps/extension/package.json`'s version. Always bump that version before shipping meaningful updates.
+
 ## Testing & Linting
 ```bash
 pnpm lint

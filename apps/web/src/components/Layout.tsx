@@ -28,7 +28,7 @@ export function Layout({ view, onNavigate, children }: LayoutProps) {
             </div>
             <p className="text-lg font-semibold tracking-wide">Bookmark Logo</p>
           </div>
-          <nav className="flex items-center gap-6 text-sm font-semibold tracking-wide text-white/70">
+          <nav className="flex flex-wrap items-center gap-6 text-sm font-semibold tracking-wide text-white/70">
             {secondaryNav.map((item) => (
               <button
                 key={item.view}
@@ -39,6 +39,14 @@ export function Layout({ view, onNavigate, children }: LayoutProps) {
                 {item.label}
               </button>
             ))}
+            <a
+              href="/extension"
+              target="_blank"
+              rel="noreferrer"
+              className="uppercase tracking-[0.2em] text-white/90 transition hover:text-white"
+            >
+              Extension
+            </a>
           </nav>
         </header>
         <section className="flex-1 py-12">{children}</section>

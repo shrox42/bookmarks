@@ -11,3 +11,5 @@ coverage
 apps/api/data/
 data/*.db
 plan.md
+apps/web/public/extension/*.zip
+apps/web/public/extension/*.json

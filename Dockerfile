@@ -15,6 +15,7 @@ RUN pnpm --filter @bookmarks/shared build \
   && pnpm --filter @bookmarks/api build \
   && pnpm --filter @bookmarks/web build \
   && pnpm --filter @bookmarks/extension build
+RUN SKIP_EXTENSION_BUILD=1 ./scripts/package-extension.sh
 RUN pnpm deploy --legacy --filter @bookmarks/api --prod /app/out/api \
   && chmod +x /app/out/api/docker-entrypoint.sh
 RUN mkdir -p /app/out/web \

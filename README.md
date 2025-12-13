@@ -51,6 +51,12 @@ A pnpm-powered monorepo that ships the API, React SPA, Chromium extension, and s
    - Web client → http://localhost:5173 (proxies `/api`)
    - Extension → load `apps/extension/dist` as an unpacked extension after running `pnpm --filter @bookmarks/extension build` (blank New Tabs auto-redirect to `VITE_WEB_URL`, default `http://localhost:14747/`; disable with `VITE_ENABLE_NEW_TAB_REDIRECT=false`).
 
+### Manual extension packaging
+- `pnpm package-extension` (or `pnpm --filter @bookmarks/extension package`) cleans the `dist/`, rebuilds the MV3 bundle, zips it, calculates the SHA256, and writes both artifacts + `latest.json` metadata under `apps/web/public/extension/`. The script copies the same files into `apps/web/dist/extension/` whenever a web build already exists so Docker releases ship the download automatically.
+- `pnpm build` now runs the packaging step for you, so every deployment produces `/extension/bookmark-dropper-vX.Y.Z.zip` alongside metadata.
+- Share the download by pointing teammates at `http://localhost:14747/extension` (or your deployed host). The helper page links to the latest zip, shows the checksum, and describes the Chrome Developer Mode install flow.
+- Always bump `apps/extension/package.json`'s `version` (which now sources the manifest) before packaging meaningful changes so Chrome prompts users to reload.
+
 ## Quality Gates
 
 ```bash
