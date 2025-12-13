@@ -19,7 +19,7 @@ services:
     depends_on:
       - api
     ports:
-      - "${WEB_PORT:-47474}:80"
+      - "${WEB_PORT:-14747}:80"
     restart: unless-stopped
 
 volumes:
