@@ -48,6 +48,7 @@ pnpm --filter @bookmarks/extension dev
 
 ### Environment Variables
 - `apps/web` + `apps/extension` optionally honor `VITE_API_URL`; default is `/api` (web) and `http://localhost:4000` (extension/background).
+- `apps/extension` respects `VITE_ENABLE_NEW_TAB_REDIRECT` (default `true`) and `VITE_WEB_APP_URL` (default `http://localhost:5173`) to control the optional new-tab redirect into the Bookmark Search app without affecting regular bookmark navigation.
 - Never commit `.env` files. Update `.env.example` if new variables are required.
 
 ### Extension
