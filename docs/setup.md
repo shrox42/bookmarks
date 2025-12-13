@@ -46,8 +46,7 @@ pnpm --filter @bookmarks/extension dev
 - Override the location by exporting `DATABASE_URL` before running the API or tests.
 
 ### Environment Variables
-- `apps/web` + `apps/extension` optionally honor `VITE_API_URL`; default is `/api` (web) and `http://localhost:14747/api` (extension/background when using Docker).
-- `apps/extension` respects `VITE_ENABLE_NEW_TAB_REDIRECT` (default `true`) and `VITE_WEB_APP_URL` (default `http://localhost:5173`) to control the optional new-tab redirect into the Bookmark Search app without affecting regular bookmark navigation.
+- `apps/web` + `apps/extension` optionally honor `VITE_API_URL`; default is `/api` (web) and `http://localhost:14747/api` (extension/background when using Docker). The extension reads `VITE_WEB_URL` (default `http://localhost:14747/`, falling back to `VITE_WEB_APP_URL` for compatibility) for its new-tab redirect target and `VITE_ENABLE_NEW_TAB_REDIRECT` (`true` by default) to disable that behavior during development.
 - Never commit `.env` files. Update `.env.example` if new variables are required.
 
 ### Extension
@@ -57,6 +56,8 @@ pnpm --filter @bookmarks/extension dev
    ```
 2. Load the output directory in Chrome via `chrome://extensions` → "Load unpacked".
 3. Use the toolbar button to instant-save the active tab; the popup form can edit the title/URL before calling the API.
+
+Blank `chrome://newtab` tabs automatically redirect to the Bookmark SPA at `VITE_WEB_URL` (defaults to `http://localhost:14747/`). To keep Chrome's stock new tab page in development, export `VITE_ENABLE_NEW_TAB_REDIRECT=false` before running `pnpm --filter @bookmarks/extension dev` or building, or point `VITE_WEB_URL` at a different environment.
 
 ## Testing & Linting
 ```bash

@@ -49,7 +49,7 @@ A pnpm-powered monorepo that ships the API, React SPA, Chromium extension, and s
    ```
    - API → http://localhost:4000
    - Web client → http://localhost:5173 (proxies `/api`)
-   - Extension → load `apps/extension/dist` as an unpacked extension after running `pnpm --filter @bookmarks/extension build`
+   - Extension → load `apps/extension/dist` as an unpacked extension after running `pnpm --filter @bookmarks/extension build` (blank New Tabs auto-redirect to `VITE_WEB_URL`, default `http://localhost:14747/`; disable with `VITE_ENABLE_NEW_TAB_REDIRECT=false`).
 
 ## Quality Gates
 
