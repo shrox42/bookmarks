@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bookmark Dropper Extension</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #05060a;
+        color: #f7fafc;
+        min-height: 100vh;
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        margin-bottom: 0.5rem;
+      }
+
+      p.lede {
+        color: #cfd4e1;
+        margin-bottom: 2rem;
+      }
+
+      section {
+        margin-bottom: 2.5rem;
+      }
+
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      a.button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.85rem 1.5rem;
+        border-radius: 999px;
+        background: #4c8dff;
+        color: #05060a;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.4rem;
+      }
+
+      ol {
+        padding-left: 1.25rem;
+        color: #d7dbe8;
+      }
+
+      footer {
+        color: #8f96ab;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Bookmark Dropper Extension</h1>
+      <p class="lede">
+        Download the latest unpacked build, then load it via <code>chrome://extensions</code> with Developer Mode enabled.
+      </p>
+
+      <section id="download" class="card">
+        <p>Loading latest build info…</p>
+      </section>
+
+      <section class="card">
+        <h2>Manual install</h2>
+        <ol>
+          <li>Download the zip above and extract it.</li>
+          <li>Visit <code>chrome://extensions</code>, enable <strong>Developer Mode</strong>.</li>
+          <li>Click <strong>Load unpacked</strong> and select the extracted folder.</li>
+          <li>Repeat the process whenever a new build is posted here.</li>
+        </ol>
+      </section>
+
+      <footer>Tip: bump the extension version before packaging so teammates can see Chrome's “Reload” prompt.</footer>
+    </main>
+
+    <script>
+      function withTrailingSlash(pathname) {
+        return pathname.endsWith('/') ? pathname : pathname + '/';
+      }
+
+      async function loadManifest() {
+        const target = document.querySelector('#download');
+        const basePath = withTrailingSlash(window.location.pathname);
+        try {
+          const response = await fetch(`${basePath}latest.json`, { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error('Manifest missing');
+          }
+          const manifest = await response.json();
+          const link = document.createElement('a');
+          link.href = `${basePath}${manifest.fileName}`;
+          link.className = 'button';
+          link.textContent = `Download v${manifest.version}`;
+          link.download = manifest.fileName;
+
+          const meta = document.createElement('p');
+          meta.innerHTML = `<strong>Built:</strong> ${new Date(manifest.builtAt).toLocaleString()}<br/><strong>SHA256:</strong> <code>${manifest.sha256}</code>`;
+
+          target.innerHTML = '';
+          target.appendChild(link);
+          target.appendChild(meta);
+        } catch (error) {
+          target.innerHTML =
+            '<p>Build artifacts are not ready yet. Run <code>pnpm package-extension</code> and deploy again.</p>';
+          console.error(error);
+        }
+      }
+
+      loadManifest();
+    </script>
+  </body>
+</html>
