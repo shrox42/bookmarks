@@ -27,7 +27,7 @@ const NEW_TAB_URLS = new Set(
 
 const isNewTabUrl = (url?: string | null) => {
   const normalized = normalizeUrl(url);
-  if (!normalized) return true;
+  if (!normalized) return false; // Empty URL = not a new tab (could be window.open)
   if (normalized.startsWith('chrome-search://local-ntp')) return true;
   return NEW_TAB_URLS.has(normalized);
 };
@@ -41,10 +41,11 @@ function handleNewTab(tab: chrome.tabs.Tab) {
   if (!tab.id || redirectingTabs.has(tab.id) || !shouldRedirect(tab)) {
     return;
   }
-  redirectingTabs.add(tab.id);
-  chrome.tabs.update(tab.id, { url: WEB_CLIENT_URL }, () => {
+  const tabId = tab.id;
+  redirectingTabs.add(tabId);
+  chrome.tabs.update(tabId, { url: WEB_CLIENT_URL }, () => {
     if (chrome.runtime.lastError) {
-      redirectingTabs.delete(tab.id);
+      redirectingTabs.delete(tabId);
     }
   });
 }
